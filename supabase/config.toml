@@ -1,0 +1,6 @@
+# Configuración mínima para la CLI de Supabase (npx supabase ...).
+project_id = "geocam"
+
+# La plataforma rechaza peticiones sin un JWT válido antes de ejecutar la función.
+[functions.describir-foto]
+verify_jwt = true
