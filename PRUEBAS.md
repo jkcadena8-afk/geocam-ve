@@ -25,3 +25,8 @@ Marca ✅ / ❌ en **Resultado**. Las filas *verificado* ya se comprobaron en el
 | P8 | T5 | Otro teléfono, misma cuenta | Baja la descripción | |
 | P9 | Límite | `secrets set LIMITE_DIARIO=3`, describir 4 veces | La 4.ª: "Llegaste al límite…" | |
 | P10 | Extra | Pestaña Fotos, foto sin nota | Muestra "✨ primeras palabras…" | |
+| P11 | Asistente | Pestaña Asistente → "Resume mis fotos de esta semana" | Respuesta por partes que menciona tus fotos | |
+| P12 | Asistente | Modo avión en Asistente | Aviso "Sin conexión" y envío apagado | |
+| P13 | Asistente | Tocar ■ mientras responde | La respuesta se corta | |
+| P14 | Cuenta | Cuenta → Cerrar sesión → confirmar | Vuelve al login; al entrar de nuevo las fotos siguen | |
+| P15 | Login | Contraseña incorrecta | "Correo o contraseña incorrectos." | |

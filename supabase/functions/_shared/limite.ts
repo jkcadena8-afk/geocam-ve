@@ -3,7 +3,7 @@
 // Así la función solo puede ver e insertar las filas de quien llama, y nadie puede borrarlas.
 import type { SupabaseClient } from 'npm:@supabase/supabase-js@2';
 
-export type FuncionIA = 'tutor' | 'tarjetas' | 'describir-foto';
+export type FuncionIA = 'tutor' | 'tarjetas' | 'describir-foto' | 'asistente';
 
 const LIMITE = Number(Deno.env.get('LIMITE_DIARIO') ?? '20');
 

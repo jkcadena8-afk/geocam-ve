@@ -10,6 +10,10 @@ if (!url || !key) {
   throw new Error('Faltan EXPO_PUBLIC_SUPABASE_URL o EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY en .env');
 }
 
+// El chat del asistente llama a la Edge Function con fetch propio (streaming) y necesita estos dos valores
+export const SUPABASE_URL: string = url;
+export const SUPABASE_PUBLISHABLE_KEY: string = key;
+
 export const supabase = createClient(url, key, {
   auth: {
     storage: secureStorage,

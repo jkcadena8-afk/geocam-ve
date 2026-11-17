@@ -9,7 +9,7 @@ alter table public.photos add column if not exists ai_description text;
 create table if not exists public.uso_ia (
   id         bigint generated always as identity primary key,
   user_id    uuid not null default auth.uid() references auth.users (id) on delete cascade,
-  funcion    text not null check (funcion in ('tutor', 'tarjetas', 'describir-foto')),
+  funcion    text not null check (funcion in ('tutor', 'tarjetas', 'describir-foto', 'asistente')),
   created_at timestamptz not null default now()
 );
 

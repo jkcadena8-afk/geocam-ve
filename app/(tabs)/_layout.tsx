@@ -70,6 +70,8 @@ export default function TabsLayout() {
           tabBarBadge: photos.length > 0 ? photos.length : undefined,
         }}
       />
+      <Tabs.Screen name="asistente" options={{ title: 'Asistente', tabBarIcon: icono('sparkles') }} />
+      <Tabs.Screen name="cuenta" options={{ title: 'Cuenta', tabBarIcon: icono('person-circle') }} />
     </Tabs>
   );
 }

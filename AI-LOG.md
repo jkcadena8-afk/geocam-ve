@@ -32,3 +32,10 @@ El Expo Go de la tienda ya solo abre SDK 58, así que el proyecto se actualizó 
 
 - `push` leía la foto con `fetch(photo.uri)`. El `fetch` de React Native no siempre lee rutas `file://` en Android, así que la subida podía fallar. Se cambió por `new File(photo.uri).arrayBuffer()` de `expo-file-system`, la misma API que usa el resto del proyecto.
 - Al editar el README, la IA metió acentos graves (\`) dentro de un comando de bash entre comillas dobles; bash los interpretó como sustitución de comandos y la sección quedó con huecos. Se detectó al revisar la salida y se reescribió con un heredoc entre comillas simples. Ningún comando sustituido modificó archivos ni Supabase.
+
+### Asistente IA, cuenta y login (16-nov-2026)
+
+- **Prompt:** "Vamos a reestructurar el login. Vamos a poner dentro del GeoCam el asistente de IA... Haz que se pueda cerrar la sesión. Hazlo mucho más práctico."
+- **Qué generó la IA:** Edge Function `asistente` (streaming, contexto de fotos validado con zod, límite `uso_ia`), `lib/chatTransport.ts`, pestañas Asistente y Cuenta, nuevo login y errores de Supabase traducidos.
+- **Error real 1 · ruta interna de React Native:** el `polyfills.ts` copiado del Tutor IA importaba `react-native/Libraries/Utilities/PolyfillFunctions`. En SDK 58 (RN 0.88) esa ruta ya no tiene tipos y `tsc` falló. Se reemplazó por `Object.defineProperty` sobre `globalThis`.
+- **Error real 2 · faltaba zod:** `tsc` pasó, pero el bundle falló con `Unable to resolve module zod/v4`. El AI SDK lo pide como dependencia par y `legacy-peer-deps=true` hace que npm no la instale sola. Se agregó `zod` a `package.json`.

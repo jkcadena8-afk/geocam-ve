@@ -22,6 +22,12 @@ Proyecto en **Expo SDK 58** (Expo Go de la tienda). Las Edge Functions `describi
 
 Con la CLI también funciona: `npx supabase login`, `npx supabase link --project-ref TU_REF`, `npx supabase secrets set GEMINI_API_KEY=...` y `npx supabase functions deploy describir-foto`.
 
+## Pestañas nuevas: Asistente y Cuenta
+
+- **Asistente** (`app/(tabs)/asistente.tsx`): chat en streaming con la Edge Function `asistente`. Con cada pregunta la app envía un resumen de tus últimas 60 fotos (fecha, nota, descripción de IA, coordenadas redondeadas, favorita y álbum) y **nunca las imágenes**. El servidor valida ese resumen con zod y cuenta el uso en `uso_ia`. Trae sugerencias como "Resume mis fotos de esta semana" o "Sugiere notas para mis fotos sin nota", botón ■ para detener, Reintentar y aviso sin conexión.
+- **Cuenta** (`app/(tabs)/cuenta.tsx`): correo de la sesión, resumen de tus fotos, estado de la nube y **Cerrar sesión** con confirmación.
+- **Login** (`app/login.tsx`): modos Iniciar sesión / Crear cuenta, ver u ocultar la contraseña, confirmación de contraseña y errores de Supabase traducidos al español.
+
 ## Requisitos del taller (Semana 10)
 
 | # | Requisito | Dónde | Cómo lo compruebas |

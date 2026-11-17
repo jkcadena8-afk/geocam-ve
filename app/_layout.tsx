@@ -1,6 +1,7 @@
 // app/_layout.tsx
 // Orden de arranque: 1) migraciones locales, 2) rellenar campos de nube, 3) autenticación.
 // Semana 9: todo queda dentro de QueryClientProvider.
+import '../polyfills'; // primero: el AI SDK necesita structuredClone y TextDecoderStream
 import '../global.css';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';

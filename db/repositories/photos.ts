@@ -3,7 +3,20 @@
 import { and, asc, desc, eq, gt, isNotNull, isNull, like, or, type SQL } from 'drizzle-orm';
 import * as Crypto from 'expo-crypto';
 import { db } from '@/db/client';
-import { photos, type NewPhoto } from '@/db/schema';
+import { albums, photos, type NewPhoto } from '@/db/schema';
+
+/** Lo que el asistente sabe de cada foto. Nunca la imagen. */
+export interface FotoContexto {
+  fecha: string;
+  nota: string | null;
+  descripcion: string | null;
+  lat: number | null;
+  lng: number | null;
+  favorita: boolean;
+  album: string | null;
+}
+
+const redondear = (n: number | null) => (n == null ? null : Math.round(n * 1e4) / 1e4);
 
 type PhotoInput = Omit<NewPhoto, 'id' | 'createdAt'>;
 export type PhotoChanges = Partial<Pick<NewPhoto, 'note' | 'favorite' | 'albumId'>>;
@@ -133,6 +146,33 @@ export const photosRepo = {
         .set({ clientId: Crypto.randomUUID(), updatedAt: row.updatedAt ?? row.createdAt })
         .where(eq(photos.id, row.id));
     }
+  },
+
+  /** Asistente IA: resumen de las fotos más recientes (sin imágenes) para enviar con cada pregunta. */
+  async contextoAsistente(limite = 60): Promise<FotoContexto[]> {
+    const rows = await db
+      .select({
+        createdAt: photos.createdAt,
+        note: photos.note,
+        aiDescription: photos.aiDescription,
+        latitude: photos.latitude,
+        longitude: photos.longitude,
+        favorite: photos.favorite,
+        album: albums.name,
+      })
+      .from(photos)
+      .leftJoin(albums, eq(photos.albumId, albums.id))
+      .orderBy(desc(photos.createdAt))
+      .limit(limite);
+    return rows.map((r) => ({
+      fecha: r.createdAt.toISOString(),
+      nota: r.note?.slice(0, 300) ?? null,
+      descripcion: r.aiDescription?.slice(0, 400) ?? null,
+      lat: redondear(r.latitude), // ~10 m: suficiente para decir el lugar
+      lng: redondear(r.longitude),
+      favorita: r.favorite,
+      album: r.album ?? null,
+    }));
   },
 
   async remove(id: number) {
