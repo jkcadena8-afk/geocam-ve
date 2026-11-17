@@ -117,7 +117,7 @@ export default function MapaScreen() {
       {totalPhotos === 0 && (
         <View className="absolute left-4 right-4 top-14 rounded-xl bg-neutral-900/90 p-4">
           <Text className="text-center text-neutral-200">
-            Aún no hay fotos. Toma una en la pestaña GeoCam.
+            Aún no hay fotos con ubicación. Toma una en la pestaña Cámara.
           </Text>
         </View>
       )}

@@ -1,4 +1,4 @@
-// app/(tabs)/cuenta.tsx
+// app/cuenta.tsx
 // Tu cuenta: quién inició sesión, resumen de tus fotos, estado de la nube y cerrar sesión.
 import type { ComponentProps } from 'react';
 import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
@@ -40,9 +40,8 @@ export default function CuentaScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-neutral-950" edges={['top']}>
+    <SafeAreaView className="flex-1 bg-neutral-950" edges={['bottom']}>
       <ScrollView contentContainerClassName="gap-5 p-4">
-        <Text className="text-2xl font-bold text-white">Cuenta</Text>
 
         <View className="flex-row items-center gap-3 rounded-2xl bg-neutral-900 p-4">
           <View className="h-12 w-12 items-center justify-center rounded-full bg-emerald-500">

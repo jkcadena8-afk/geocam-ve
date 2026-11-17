@@ -1,6 +1,6 @@
 // app/(tabs)/asistente.tsx
 // Asistente con IA que conoce el resumen de tus fotos: responde en streaming (useChat + expo/fetch).
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -11,6 +11,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useChat } from '@ai-sdk/react';
@@ -58,6 +59,21 @@ export default function AsistenteScreen() {
     sendMessage({ text: pregunta.trim() });
     setTexto('');
   };
+
+  // Atajo desde Inicio: /asistente?q=... envía la pregunta una sola vez y limpia el parámetro
+  const { q } = useLocalSearchParams<{ q?: string }>();
+  useEffect(() => {
+    if (!q) return;
+    router.setParams({ q: undefined });
+    if (ocupado || !isOnline) {
+      setTexto(q);
+      return;
+    }
+    clearError();
+    sendMessage({ text: q });
+    // Solo debe reaccionar a una pregunta nueva
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q]);
 
   return (
     <SafeAreaView className="flex-1 bg-neutral-950" edges={['top']}>

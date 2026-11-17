@@ -40,3 +40,10 @@ El Expo Go de la tienda ya solo abre SDK 58, así que el proyecto se actualizó 
 - **Error real 1 · ruta interna de React Native:** el `polyfills.ts` copiado del Tutor IA importaba `react-native/Libraries/Utilities/PolyfillFunctions`. En SDK 58 (RN 0.88) esa ruta ya no tiene tipos y `tsc` falló. Se reemplazó por `Object.defineProperty` sobre `globalThis`.
 - **Error real 2 · faltaba zod:** `tsc` pasó, pero el bundle falló con `Unable to resolve module zod/v4`. El AI SDK lo pide como dependencia par y `legacy-peer-deps=true` hace que npm no la instale sola. Se agregó `zod` a `package.json`.
 - **Error real 3 · modelo saturado:** con la key ya guardada, el asistente abría el stream pero nunca llegaba texto. Probando la key directo contra Gemini, `gemini-3.8-flash` respondía `503 high demand` y la función se quedaba esperando hasta que Supabase la apagaba. Se cambió el modelo por defecto a `gemini-3.5-flash-lite` (la alternativa que da la guía) y se agregó `abortSignal: AbortSignal.timeout(45000)` para que, si Gemini no responde, el usuario vea un error en vez de esperar sin fin. Verificado: el asistente respondió con una cuenta de prueba.
+
+### Rediseño de la app (17-nov-2026)
+
+- **Prompt:** "Reforma GeoCam bien... que quede sumamente funcional y estético... y ese asistente IA tenemos que hacerlo funcionar."
+- **Hallazgo:** las capturas de "no funciona" eran de otro proyecto (`taller-semana-7-main`), porque la terminal arrancaba Expo en esa carpeta. Se verificó con el proceso que escuchaba en el puerto 8081.
+- **Qué se hizo:** pestaña Inicio (saludo, llamado a la cámara, estadísticas, recientes, atajos al asistente y "cómo funciona"), cámara con estado de GPS, degradados, vibración y aviso al guardar, galería con contador y estado vacío, permisos con ícono y explicación, Cuenta como pantalla aparte desde el avatar.
+- **Error real 4 · rutas tipadas desactualizadas:** con `typedRoutes`, `tsc` rechazó `/inicio`, `/asistente` y `/cuenta` porque `.expo/types/router.d.ts` se genera al arrancar Expo. Se regeneró arrancando Expo un momento.

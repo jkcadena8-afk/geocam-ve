@@ -5,5 +5,5 @@ import { useAuth } from '@/context/AuthContext';
 
 export default function Index() {
   const { session } = useAuth();
-  return <Redirect href={session ? '/geocam' : '/login'} />;
+  return <Redirect href={session ? '/inicio' : '/login'} />;
 }

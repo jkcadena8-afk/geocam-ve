@@ -1,5 +1,5 @@
 // app/(tabs)/_layout.tsx
-// Pestañas GeoCam y Mapa. El sensor de agitado vive aquí para funcionar en ambas pestañas.
+// Pestañas Inicio, Cámara, Galería, Mapa y Asistente. El sensor de agitado vive aquí para funcionar en todas.
 import { useCallback, useState } from 'react';
 import { Alert } from 'react-native';
 import { Tabs } from 'expo-router';
@@ -43,35 +43,17 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#10b981',
-        tabBarInactiveTintColor: '#a3a3a3',
-        tabBarStyle: { backgroundColor: '#0a0a0a', borderTopColor: '#262626' },
+        tabBarActiveTintColor: '#34d399',
+        tabBarInactiveTintColor: '#737373',
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
+        tabBarStyle: { backgroundColor: '#0a0a0a', borderTopColor: '#171717', paddingTop: 4 },
       }}
     >
-      <Tabs.Screen
-        name="geocam"
-        options={{
-          title: 'GeoCam',
-          tabBarIcon: icono('camera'),
-        }}
-      />
-      <Tabs.Screen
-        name="fotos"
-        options={{
-          title: 'Fotos',
-          tabBarIcon: icono('images'),
-        }}
-      />
-      <Tabs.Screen
-        name="mapa"
-        options={{
-          title: 'Mapa',
-          tabBarIcon: icono('map'),
-          tabBarBadge: photos.length > 0 ? photos.length : undefined,
-        }}
-      />
+      <Tabs.Screen name="inicio" options={{ title: 'Inicio', tabBarIcon: icono('home') }} />
+      <Tabs.Screen name="geocam" options={{ title: 'Cámara', tabBarIcon: icono('camera') }} />
+      <Tabs.Screen name="fotos" options={{ title: 'Galería', tabBarIcon: icono('images') }} />
+      <Tabs.Screen name="mapa" options={{ title: 'Mapa', tabBarIcon: icono('map') }} />
       <Tabs.Screen name="asistente" options={{ title: 'Asistente', tabBarIcon: icono('sparkles') }} />
-      <Tabs.Screen name="cuenta" options={{ title: 'Cuenta', tabBarIcon: icono('person-circle') }} />
     </Tabs>
   );
 }

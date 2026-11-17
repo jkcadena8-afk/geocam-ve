@@ -35,6 +35,16 @@ function RootNavigator() {
       <Stack.Protected guard={!!session}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
+          name="cuenta"
+          options={{
+            headerShown: true,
+            title: 'Mi cuenta',
+            headerBackTitle: 'Volver',
+            headerStyle: { backgroundColor: '#0a0a0a' },
+            headerTintColor: '#ffffff',
+          }}
+        />
+        <Stack.Screen
           name="foto/[id]"
           options={{
             headerShown: true,

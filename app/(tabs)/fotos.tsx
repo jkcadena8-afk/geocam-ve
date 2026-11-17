@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { usePhotoSearch, type AlbumFilter } from '@/hooks/usePhotoSearch';
 import { useAlbums } from '@/hooks/useAlbums';
-import { useAuth } from '@/context/AuthContext';
 import { isPending } from '@/hooks/useSync';
 import { SyncBadge } from '@/components/SyncBadge';
 
@@ -46,7 +45,6 @@ export default function FotosScreen() {
 
   const { results } = usePhotoSearch({ search, albumId, onlyFavorites });
   const { albums, createAlbum, removeAlbum } = useAlbums();
-  const { session, signOut } = useAuth();
 
   const [creating, setCreating] = useState(false);
   const [newAlbum, setNewAlbum] = useState('');
@@ -84,20 +82,20 @@ export default function FotosScreen() {
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-neutral-950">
       <View className="gap-3 px-4 pb-3 pt-2">
-        <View className="flex-row items-center justify-between">
-          <Text className="text-2xl font-bold text-white">Fotos</Text>
+        <View className="flex-row items-end justify-between">
+          <View>
+            <Text className="text-2xl font-bold text-white">Galería</Text>
+            <Text className="text-xs text-neutral-400">
+              {hasFilters ? `${results.length} coinciden` : `${results.length} ${results.length === 1 ? 'foto' : 'fotos'}`}
+            </Text>
+          </View>
           <Pressable
-            onPress={() =>
-              Alert.alert('Cerrar sesión', session?.user.email ?? '', [
-                { text: 'Cancelar', style: 'cancel' },
-                { text: 'Cerrar sesión', style: 'destructive', onPress: () => signOut() },
-              ])
-            }
-            className="h-10 w-10 items-center justify-center"
+            onPress={() => router.navigate('/geocam')}
+            className="flex-row items-center gap-1.5 rounded-full bg-emerald-500 px-3 py-2"
             accessibilityRole="button"
-            accessibilityLabel="Cerrar sesión"
           >
-            <Ionicons name="log-out-outline" size={22} color="#a3a3a3" />
+            <Ionicons name="camera" size={16} color="#0a0a0a" />
+            <Text className="text-sm font-semibold text-neutral-950">Nueva</Text>
           </Pressable>
         </View>
 
@@ -173,9 +171,24 @@ export default function FotosScreen() {
         columnWrapperClassName="gap-1.5"
         ItemSeparatorComponent={() => <View className="h-1.5" />}
         ListEmptyComponent={
-          <Text className="mt-10 px-8 text-center text-neutral-400">
-            {hasFilters ? 'Ninguna foto coincide con la búsqueda.' : 'Aún no hay fotos. Toma una en GeoCam.'}
-          </Text>
+          <View className="mt-16 items-center gap-3 px-8">
+            <View className="h-16 w-16 items-center justify-center rounded-2xl bg-neutral-900">
+              <Ionicons name={hasFilters ? 'search' : 'images-outline'} size={30} color="#525252" />
+            </View>
+            <Text className="text-center font-semibold text-white">
+              {hasFilters ? 'Ninguna foto coincide' : 'Tu galería está vacía'}
+            </Text>
+            <Text className="text-center text-sm text-neutral-400">
+              {hasFilters
+                ? 'Prueba con otra palabra o quita los filtros.'
+                : 'Toma tu primera foto: se guarda con su ubicación y se respalda en la nube.'}
+            </Text>
+            {!hasFilters && (
+              <Pressable onPress={() => router.navigate('/geocam')} className="mt-1 rounded-full bg-emerald-500 px-5 py-2.5">
+                <Text className="font-semibold text-neutral-950">Abrir cámara</Text>
+              </Pressable>
+            )}
+          </View>
         }
         renderItem={({ item }) => (
           <Pressable
@@ -184,7 +197,7 @@ export default function FotosScreen() {
             onPress={() => router.push({ pathname: '/foto/[id]', params: { id: String(item.id) } })}
             accessibilityLabel={item.note ?? 'Foto'}
           >
-            <Image source={{ uri: item.uri }} className="h-full w-full rounded-lg bg-neutral-900" />
+            <Image source={{ uri: item.uri }} className="h-full w-full rounded-xl bg-neutral-900" />
             {/* Nube: sincronizada (azul) o pendiente de subir (ámbar) */}
             <View className="absolute left-1 top-1">
               <Ionicons
