@@ -1,0 +1,1 @@
+Coloca aquí las capturas con los nombres que indica el README (01-login.png, 02-inicio.png, ...).

@@ -22,11 +22,44 @@ Proyecto en **Expo SDK 58** (Expo Go de la tienda). Las Edge Functions `describi
 
 Con la CLI también funciona: `npx supabase login`, `npx supabase link --project-ref TU_REF`, `npx supabase secrets set GEMINI_API_KEY=...` y `npx supabase functions deploy describir-foto`.
 
-## Pestañas nuevas: Asistente y Cuenta
+## La app (GeoCam IA)
 
-- **Asistente** (`app/(tabs)/asistente.tsx`): chat en streaming con la Edge Function `asistente`. Con cada pregunta la app envía un resumen de tus últimas 60 fotos (fecha, nota, descripción de IA, coordenadas redondeadas, favorita y álbum) y **nunca las imágenes**. El servidor valida ese resumen con zod y cuenta el uso en `uso_ia`. Trae sugerencias como "Resume mis fotos de esta semana" o "Sugiere notas para mis fotos sin nota", botón ■ para detener, Reintentar y aviso sin conexión.
-- **Cuenta** (`app/(tabs)/cuenta.tsx`): correo de la sesión, resumen de tus fotos, estado de la nube y **Cerrar sesión** con confirmación.
-- **Login** (`app/login.tsx`): modos Iniciar sesión / Crear cuenta, ver u ocultar la contraseña, confirmación de contraseña y errores de Supabase traducidos al español.
+| Pantalla | Qué hace | Archivo |
+| --- | --- | --- |
+| Login | Iniciar sesión / Crear cuenta, ver la contraseña, errores en español | `app/login.tsx` |
+| Inicio | Saludo, llamado a la cámara, estadísticas, fotos recientes, atajos al asistente y "cómo funciona" | `app/(tabs)/inicio.tsx` |
+| Cámara | Foto con GPS (precisión visible), galería, vibración y aviso al guardar | `app/(tabs)/geocam.tsx` |
+| Galería | Búsqueda por nota, favoritas, álbumes y estado de la nube por foto | `app/(tabs)/fotos.tsx` |
+| Detalle | Nota, favorita, álbum y **✨ Describir con IA** (sugerencia editable) | `app/foto/[id].tsx` |
+| Mapa | Un pin por foto con ubicación | `app/(tabs)/mapa.tsx` |
+| Asistente | Chat en streaming que conoce el resumen de tus fotos (nunca las imágenes) | `app/(tabs)/asistente.tsx` |
+| Cuenta | Correo, resumen, estado de la nube y **Cerrar sesión** (desde el avatar en Inicio) | `app/cuenta.tsx` |
+
+**Asistente:** con cada pregunta la app envía, a la Edge Function `asistente`, la fecha, nota, descripción de IA, coordenadas redondeadas (~10 m), favorita y álbum de tus últimas 60 fotos. El servidor valida ese resumen con zod, cuenta el uso en `uso_ia` y responde en streaming con Gemini.
+
+**Modelo:** por defecto `gemini-3.5-flash-lite`, porque `gemini-3.8-flash` respondía 503 (*high demand*). Se cambia sin redesplegar con el secreto `GEMINI_MODEL`. Si Gemini no responde en 45 s, la app muestra un error.
+
+## Evidencias
+
+Guarda las capturas en la carpeta `evidencias/` con estos nombres y se verán aquí:
+
+| Qué mostrar | Archivo |
+| --- | --- |
+| Login | `evidencias/01-login.png` |
+| Inicio | `evidencias/02-inicio.png` |
+| Foto descrita con IA (detalle) | `evidencias/03-describir-ia.png` |
+| Asistente respondiendo | `evidencias/04-asistente.png` |
+| Mensaje de límite (con `LIMITE_DIARIO=3`) | `evidencias/05-limite.png` |
+| Supabase › Table Editor › photos con `ai_description` | `evidencias/06-supabase.png` |
+| `curl` sin token → 401 | `evidencias/07-curl-401.png` |
+
+![Login](evidencias/01-login.png)
+![Inicio](evidencias/02-inicio.png)
+![Describir con IA](evidencias/03-describir-ia.png)
+![Asistente](evidencias/04-asistente.png)
+![Límite](evidencias/05-limite.png)
+![Supabase](evidencias/06-supabase.png)
+![curl 401](evidencias/07-curl-401.png)
 
 ## Requisitos del taller (Semana 10)
 
