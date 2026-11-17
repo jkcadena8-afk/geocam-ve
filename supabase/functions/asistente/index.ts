@@ -10,7 +10,7 @@ import {
   type UIMessage,
 } from 'npm:ai@7';
 import { z } from 'npm:zod@4';
-import { errorParaUsuario, google, MODELO } from '../_shared/gemini.ts';
+import { errorParaUsuario, google, MODELO, TIEMPO_MAXIMO_MS } from '../_shared/gemini.ts';
 import { verificarLimite } from '../_shared/limite.ts';
 
 // Los datos llegan del teléfono: se validan y se recortan. Si algo no cuadra, se ignoran las fotos.
@@ -64,6 +64,7 @@ export default {
       temperature: 0.4,
       maxRetries: 1,
       maxOutputTokens: 800,
+      abortSignal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
     });
 
     return createUIMessageStreamResponse({

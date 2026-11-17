@@ -3,7 +3,7 @@
 // Usa el MISMO secreto GEMINI_API_KEY que "tutor". Sin token válido responde 401.
 import { withSupabase } from 'npm:@supabase/server@1';
 import { generateText } from 'npm:ai@7';
-import { errorParaUsuario, google, MODELO } from '../_shared/gemini.ts';
+import { errorParaUsuario, google, MODELO, TIEMPO_MAXIMO_MS } from '../_shared/gemini.ts';
 import { verificarLimite } from '../_shared/limite.ts';
 
 const PREFIJO = 'data:image/jpeg;base64,';
@@ -43,6 +43,7 @@ export default {
         temperature: 0.3,
         maxRetries: 1,
         maxOutputTokens: 200,
+        abortSignal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
       });
       return Response.json({ descripcion: text.trim() });
     } catch (e) {

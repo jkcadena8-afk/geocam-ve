@@ -3,7 +3,12 @@ import { createGoogleGenerativeAI } from 'npm:@ai-sdk/google@4';
 import { APICallError, RetryError } from 'npm:ai@7';
 
 export const google = createGoogleGenerativeAI({ apiKey: Deno.env.get('GEMINI_API_KEY') });
-export const MODELO = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.8-flash';
+// gemini-3.8-flash (el de la guía) responde 503 "high demand" con frecuencia; flash-lite es la alternativa
+// que la misma guía recomienda. Se puede cambiar sin redesplegar con el secreto GEMINI_MODEL.
+export const MODELO = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash-lite';
+
+/** Si Gemini no responde en este tiempo se corta la llamada y el usuario ve un error, no una espera infinita. */
+export const TIEMPO_MAXIMO_MS = 45_000;
 
 /** Traduce un error de Gemini a { status, mensaje } para el usuario. Nunca devuelve el error crudo. */
 export function errorParaUsuario(error: unknown): { status: number; mensaje: string } {
